@@ -1,7 +1,6 @@
 package com.jawad.project.photos.clone.web;
 
 import java.io.IOException;
-import java.util.Collection;
 //import java.util.HashMap;
 //import java.util.List;
 //import java.util.Map;
@@ -39,12 +38,12 @@ public class PhotosController {
     }
 
     @GetMapping("/photos")
-    public Collection<Photo> get() {
+    public Iterable<Photo> get() {
         return photosService.get();
     }
 
     @GetMapping("/photos/{id}")
-    public Photo get(@PathVariable String id) {
+    public Photo get(@PathVariable Integer id) {
         Photo photo = photosService.get(id);
         if (photo == null) throw new ResponseStatusException(HttpStatus
             .NOT_FOUND);
@@ -52,12 +51,8 @@ public class PhotosController {
     }
 
     @DeleteMapping("/photos/{id}")
-    public void delete(@PathVariable String id) {
-        Photo photo = photosService.remove(id);
-        if (photo == null) throw new ResponseStatusException(HttpStatus
-            .NOT_FOUND);
-        
-
+    public void delete(@PathVariable Integer id) {
+        photosService.remove(id);
     }
 
     @PostMapping ("/photos")

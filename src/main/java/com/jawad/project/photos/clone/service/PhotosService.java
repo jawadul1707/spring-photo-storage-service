@@ -1,46 +1,40 @@
 package com.jawad.project.photos.clone.service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 //import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.jawad.project.photos.clone.model.Photo;
+import com.jawad.project.photos.clone.repository.PhotosRepository;
 
 @Service 
 public class PhotosService {
 
+    private final PhotosRepository photosRepository;
+
     // private List<Photo> db = List.of(new Photo("1", "hello.jpg"));
 
-    private Map<String, Photo> db = new HashMap<>() {
-        {
-            put("1", new Photo("1", "hello.jpg"));
-            put("2", new Photo("2", "world.jpg"));
-        }
-    };
-
-    public Collection<Photo> get() {
-        return db.values();
+    public PhotosService(PhotosRepository photosRepository) {
+        this.photosRepository = photosRepository;
     }
 
-    public Photo get(String id) {
-        return db.get(id);
+    public Iterable<Photo> get() {
+        return photosRepository.findAll();
     }
 
-    public Photo remove(String id) {
-        return db.remove(id);
+    public Photo get(Integer id) {
+        return photosRepository.findById(id).orElse(null);
+    }
+
+    public void remove(Integer id) {
+        photosRepository.deleteById(id);
     }
 
     public Photo save(String fileName, String contentType, byte[] data) {
         Photo photo = new Photo();
-        photo.setId(UUID.randomUUID().toString());
         photo.setFileName(fileName);
         photo.setContentType(contentType);
         photo.setData(data);
-        db.put(photo.getId(), photo);
+        photosRepository.save(photo);
         return photo;
     }
     
